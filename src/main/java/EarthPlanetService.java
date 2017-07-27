@@ -8,8 +8,8 @@ public class EarthPlanetService implements PlanetService {
 
 
     @Override
-    public boolean sendPlanet(String message, String recipient) {
-        System.out.println("Hello Earth");
+    public boolean sendMessage(String message) {
+        System.out.println("Hello Earth: " + message);
         return true;
     }
 }

@@ -4,20 +4,44 @@ import org.ff4j.FF4j;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by peterdietz on 7/25/17.
  */
 public class FeatureInjector extends AbstractModule {
     private PlanetService service;
+    private FF4j ff4j;
 
-    @Inject
-    public void setService(PlanetService planetService) {
-        this.service = planetService;
+    public FeatureInjector() {
+        refreshFeatureFlip();
     }
 
-    public boolean sendMessage(String message, String to){
-        return service.sendPlanet(message, to);
+    private void refreshFeatureFlip(){
+        try {
+            InputStream exportXML = new URL("http://localhost:8080/ff4j-web-console/api/export").openStream();
+            ff4j = new FF4j(exportXML);
+            if (ff4j.check("mars")) {
+                setService(new MarsPlanetService());
+            } else {
+                setService(new EarthPlanetService());
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public PlanetService getService() {
+        refreshFeatureFlip();
+        return this.service;
+    }
+
+    public void setService(PlanetService service){
+        this.service = service;
+    }
+
+    public boolean sendMessage(String message){
+        return getService().sendMessage(message);
     }
 
     @Override
@@ -27,27 +51,19 @@ public class FeatureInjector extends AbstractModule {
 
     public static void main(String[] args){
         try {
-            InputStream exportXML = new URL("http://localhost:8080/ff4j-web-console/api/export").openStream();
-            FF4j ff4j = new FF4j(exportXML);
             FeatureInjector featureInjector = new FeatureInjector();
-            EarthPlanetService earthPlanetService = new EarthPlanetService();
-            featureInjector.setService(earthPlanetService);
+            featureInjector.refreshFeatureFlip();
 
-            if (ff4j.check("cleveland_rocks")) {
-                System.out.println("YES, CLE ROCKS");
+            if (featureInjector.ff4j.check("cleveland_rocks")) {
+                System.out.println("YES, cleveland_rocks enabled");
             } else {
-                System.out.println("NO, CLE DOES NOT ROCK");
+                System.out.println("NO, cleveland_rocks not enabled");
             }
 
-
-            if(ff4j.check("mars")) {
-                MarsPlanetService marsPlanetService = new MarsPlanetService();
-                featureInjector.setService(marsPlanetService);
+            for(int i=0; i<Integer.MAX_VALUE;i++) {
+                featureInjector.sendMessage("iteration["+i+"] getService().sendMessage(msg)");
+                //TimeUnit.SECONDS.sleep(2);
             }
-
-
-
-            featureInjector.sendMessage("abc", "xyz");
 
         } catch (Exception e){
             System.err.println(e);

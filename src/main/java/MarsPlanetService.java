@@ -6,8 +6,8 @@ import com.google.inject.Singleton;
 @Singleton
 public class MarsPlanetService implements PlanetService {
     @Override
-    public boolean sendPlanet(String message, String recipient) {
-        System.out.println("Hello Mars");
+    public boolean sendMessage(String message) {
+        System.out.println("Hello Mars: " + message);
         return true;
     }
 }
