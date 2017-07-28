@@ -21,7 +21,7 @@ public class FeatureInjector extends AbstractModule {
         try {
             InputStream exportXML = new URL("http://localhost:8080/ff4j-web-console/api/export").openStream();
             ff4j = new FF4j(exportXML);
-            if (ff4j.check("mars")) {
+            if (ff4j.exist("mars") && ff4j.check("mars")) {
                 setService(new MarsPlanetService());
             } else {
                 setService(new EarthPlanetService());
@@ -54,7 +54,7 @@ public class FeatureInjector extends AbstractModule {
             FeatureInjector featureInjector = new FeatureInjector();
             featureInjector.refreshFeatureFlip();
 
-            if (featureInjector.ff4j.check("cleveland_rocks")) {
+            if (featureInjector.ff4j.exist("cleveland_rocks") && featureInjector.ff4j.check("cleveland_rocks")) {
                 System.out.println("YES, cleveland_rocks enabled");
             } else {
                 System.out.println("NO, cleveland_rocks not enabled");
