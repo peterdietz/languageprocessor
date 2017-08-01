@@ -1,38 +1,41 @@
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import org.ff4j.FF4j;
 
-import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by peterdietz on 7/25/17.
  */
 public class FeatureInjector extends AbstractModule {
     private PlanetService service;
-    private FF4j ff4j;
+    private static FF4j ff4j;
 
     public FeatureInjector() {
-        refreshFeatureFlip();
+        try {
+            URL restURL = new URL("http://localhost:8080");
+            ff4j = new FF4j(restURL);
+        } catch (MalformedURLException e) {
+            System.err.println("FeatureInjector:" + e.getMessage());
+        }
+
+        updateService();
     }
 
-    private void refreshFeatureFlip(){
+    private void updateService(){
         try {
-            InputStream exportXML = new URL("http://localhost:8080/ff4j-web-console/api/export").openStream();
-            ff4j = new FF4j(exportXML);
             if (ff4j.exist("mars") && ff4j.check("mars")) {
                 setService(new MarsPlanetService());
             } else {
                 setService(new EarthPlanetService());
             }
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Update: " + e.toString());
         }
     }
 
     public PlanetService getService() {
-        refreshFeatureFlip();
+        updateService();
         return this.service;
     }
 
@@ -52,7 +55,7 @@ public class FeatureInjector extends AbstractModule {
     public static void main(String[] args){
         try {
             FeatureInjector featureInjector = new FeatureInjector();
-            featureInjector.refreshFeatureFlip();
+            featureInjector.updateService();
 
             if (featureInjector.ff4j.exist("cleveland_rocks") && featureInjector.ff4j.check("cleveland_rocks")) {
                 System.out.println("YES, cleveland_rocks enabled");
@@ -62,20 +65,11 @@ public class FeatureInjector extends AbstractModule {
 
             for(int i=0; i<Integer.MAX_VALUE;i++) {
                 featureInjector.sendMessage("iteration["+i+"] getService().sendMessage(msg)");
-                //TimeUnit.SECONDS.sleep(2);
             }
 
         } catch (Exception e){
-            System.err.println(e);
+            System.err.println("main:" + e);
         }
-
-
-        /*
-            ApiConfig apiConfig = new ApiConfig();
-            apiConfig.setPort(8080);
-            apiConfig.setHost("localhost");
-            apiConfig.setWebContext("/v2/ff");
-        */
     }
 
 
