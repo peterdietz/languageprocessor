@@ -1,3 +1,4 @@
+import com.google.inject.Inject;
 import org.ff4j.FF4j;
 
 import java.net.MalformedURLException;
@@ -11,8 +12,11 @@ public class GenericPlanetService implements PlanetService {
     private static FF4j ff4j;
 
     //concretely defined impls
-    EarthPlanetService earthPlanetService = new EarthPlanetService();
-    MarsPlanetService marsPlanetService = new MarsPlanetService();
+    @Inject
+    EarthPlanetService earthPlanetService;
+
+    @Inject
+    MarsPlanetService marsPlanetService;
 
     public GenericPlanetService(){
         init();

@@ -9,6 +9,7 @@ public class RestApiModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(PlanetService.class).to(GenericPlanetService.class).in(Scopes.SINGLETON);
-        //bind(CampaignRepository.class).to(DynamoDBCampaignRepository.class).in(Scopes.SINGLETON);
+        bind(EarthPlanetService.class).asEagerSingleton();
+        bind(MarsPlanetService.class).asEagerSingleton();
     }
 }
