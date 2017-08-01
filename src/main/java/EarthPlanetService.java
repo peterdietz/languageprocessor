@@ -22,4 +22,9 @@ public class EarthPlanetService implements PlanetService {
     public Integer getPlanetNumber() {
         return 3;
     }
+
+    @Override
+    public Boolean canYouLiveThere() {
+        return true;
+    }
 }

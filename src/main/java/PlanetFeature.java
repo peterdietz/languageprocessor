@@ -21,7 +21,7 @@ public class PlanetFeature {
             PlanetFeature planetFeature = new PlanetFeature();
 
             for(int i=0; i<Integer.MAX_VALUE;i++) {
-                planetFeature.sendMessage("iteration["+i+"] getService().sendMessage(msg)");
+                planetFeature.sendMessage("iteration["+i+"] sendMessage. canYouLiveThere?: " + planetFeature.planetService.canYouLiveThere());
             }
 
         } catch (Exception e){

@@ -20,4 +20,9 @@ public class MarsPlanetService implements PlanetService {
     public Integer getPlanetNumber() {
         return 4;
     }
+
+    @Override
+    public Boolean canYouLiveThere() {
+        return false;
+    }
 }

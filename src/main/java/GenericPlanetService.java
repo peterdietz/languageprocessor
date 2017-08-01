@@ -68,4 +68,13 @@ public class GenericPlanetService implements PlanetService {
     public Integer getPlanetNumber() {
         return getService().getPlanetNumber();
     }
+
+    @Override
+    public Boolean canYouLiveThere() {
+        if(ff4j.exist("life_support_space_station") && ff4j.check("life_support_space_station")) {
+            return earthPlanetService.canYouLiveThere();
+        }
+
+        return getService().canYouLiveThere();
+    }
 }
