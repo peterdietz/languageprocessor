@@ -9,7 +9,17 @@ public class EarthPlanetService implements PlanetService {
 
     @Override
     public boolean sendMessage(String message) {
-        System.out.println("Hello Earth: " + message);
+        System.out.println(getNameOfPlanet()+"["+getPlanetNumber()+"]: " + message);
         return true;
+    }
+
+    @Override
+    public String getNameOfPlanet() {
+        return "Earth";
+    }
+
+    @Override
+    public Integer getPlanetNumber() {
+        return 3;
     }
 }

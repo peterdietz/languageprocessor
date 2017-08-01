@@ -7,7 +7,17 @@ import com.google.inject.Singleton;
 public class MarsPlanetService implements PlanetService {
     @Override
     public boolean sendMessage(String message) {
-        System.out.println("Hello Mars: " + message);
+        System.out.println(getPlanetNumber() + "-" + getNameOfPlanet() + ": " + message);
         return true;
+    }
+
+    @Override
+    public String getNameOfPlanet() {
+        return "Mars";
+    }
+
+    @Override
+    public Integer getPlanetNumber() {
+        return 4;
     }
 }

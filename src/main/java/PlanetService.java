@@ -3,4 +3,6 @@
  */
 public interface PlanetService {
     boolean sendMessage(String message);
+    String getNameOfPlanet();
+    Integer getPlanetNumber();
 }
